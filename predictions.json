@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "estado": "sin_configurar",
+  "actualizado": "2026-11-21T18:31:05.390224+00:00",
+  "zona_horaria": "America/Tijuana",
+  "inicio": "2026-11-21",
+  "fin": "2026-11-27",
+  "fuente": "API-Football (API-SPORTS)",
+  "nota": "Porcentajes heurísticos, sin calibración histórica; NO son certezas ni usan cuotas.",
+  "cobertura": {},
+  "partidos": [],
+  "mensaje": "Configura el secreto APISPORTS_KEY en GitHub para recibir partidos reales."
+}
