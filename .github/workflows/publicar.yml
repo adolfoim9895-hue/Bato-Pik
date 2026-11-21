@@ -1,0 +1,66 @@
+name: Actualizar Radar Local y publicar
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  schedule:
+    # 13:20 UTC = 05:20 en invierno / 06:20 en verano en Tijuana.
+    - cron: '20 13 * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: radar-local-pages
+  cancel-in-progress: false
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Comprobar motor estadístico
+        run: python -m unittest discover -s tests -v
+
+      - name: Calcular pronósticos de la semana
+        env:
+          APISPORTS_KEY: ${{ secrets.APISPORTS_KEY }}
+          APP_TIMEZONE: America/Tijuana
+          MAX_CALLS: '85'
+          MAX_LEAGUES: '35'
+          MAX_H2H: '12'
+          REQUEST_INTERVAL: '6.6'
+          INCLUDE_CUPS: 'false'
+        run: python scripts/update.py
+
+      - name: Crear sitio público (sin API key)
+        run: |
+          mkdir -p _site/data
+          cp index.html styles.css app.js sw.js manifest.webmanifest icon.svg icon-192.png icon-512.png _site/
+          cp data/predictions.json _site/data/
+          touch _site/.nojekyll
+
+      - name: Preparar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir el sitio
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
