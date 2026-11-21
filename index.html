@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="description" content="Radar Local: pronósticos estadísticos de favoritos locales por día. Sin cuotas de apuestas." />
+  <title>Radar Local · Pronósticos Fútbol</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"></div>
+<main class="shell" id="app">
+  <header class="topbar">
+    <div class="brandmark" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="14" fill="#16df93"/><path d="M10 30 L18 20 L25 25 L37 12" fill="none" stroke="#073829" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M29 12h8v8" fill="none" stroke="#073829" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="36" r="4.5" fill="#073829"/></svg></div>
+    <div class="brandtext"><strong>RADAR <span>LOCAL</span></strong><small>PRONÓSTICOS FÚTBOL</small></div>
+    <div class="top-right"><span class="live-dot"></span> <span class="updated-short" id="updatedShort">Sin actualizar</span></div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-kicker"><span class="spark">✦</span> SOLO FAVORITOS LOCALES <span class="hero-no-odds">SIN CUOTAS</span></div>
+    <h1>Encuentra los locales<br /><span>más fuertes de la semana.</span></h1>
+    <p>Resultados recientes, calidad de rivales, rendimiento en casa y fuera, y antecedentes entre ambos equipos.</p>
+    <div class="overview" aria-label="Resumen de pronósticos">
+      <div class="metric"><strong id="totalCount">—</strong><span>Seleccionados</span></div>
+      <div class="metric"><strong id="highCount">—</strong><span>Confianza alta</span></div>
+      <div class="metric"><strong id="mediumCount">—</strong><span>Confianza media</span></div>
+    </div>
+  </section>
+
+  <section class="controls" aria-label="Opciones de búsqueda">
+    <div class="section-label"><span>01 / CALENDARIO</span> <span id="weekRange"></span></div>
+    <div class="day-switch"><button type="button" id="dayPrev" class="nav-arrow" aria-label="Día anterior">‹</button><div class="days" id="days" role="group" aria-label="Próximos siete días"></div><button type="button" id="dayNext" class="nav-arrow" aria-label="Día siguiente">›</button></div>
+    <div class="filter-heading"><div class="section-label"><span>02 / PRONÓSTICOS</span> <span id="dayCount"></span></div></div>
+    <div class="toolbar">
+      <div class="pills" id="filterPills" role="group" aria-label="Filtrar por confianza">
+        <button type="button" class="pill active" data-filter="todos">Todos</button>
+        <button type="button" class="pill" data-filter="alta">✦ Alta</button>
+        <button type="button" class="pill" data-filter="media">◈ Media</button>
+        <button type="button" class="pill" data-filter="favoritos">♡ Favoritos</button>
+      </div>
+      <label class="search"><span aria-hidden="true">⌕</span><input id="search" placeholder="Buscar equipo o liga..." aria-label="Buscar equipo o liga" /></label>
+    </div>
+    <div class="source-note" id="sourceNote" role="status">Leyendo pronósticos...</div>
+  </section>
+
+  <section class="fixtures" id="fixtures" aria-live="polite"></section>
+  <section id="empty" class="empty hidden"><div class="empty-icon">⚽</div><h2>Sin partidos que cumplan el filtro</h2><p id="emptyText">Prueba con otro día o con las dos categorías.</p></section>
+
+  <footer class="footer"><div><b>RADAR LOCAL</b> <span>· Modelo estadístico propio</span></div><p>Los porcentajes son estimaciones, no garantías. No se usan cuotas del casino. Una etiqueta «alta» no significa ausencia de riesgo. Verifica noticias y alineaciones antes del partido.</p><button type="button" id="aboutBtn" class="text-link">¿Cómo calcula las probabilidades? <span>↗</span></button></footer>
+</main>
+<dialog id="aboutDialog"><div class="dialog-inner"><div class="dialog-head"><h2>¿Cómo funciona Radar Local?</h2><button type="button" id="closeDialog" aria-label="Cerrar">✕</button></div><p>El sistema descarga partidos de la API, obtiene los resultados previos de cada liga y aplica un modelo de goles de Poisson con ajustes moderados por calidad de rivales y forma reciente. El marcador más probable es el resultado exacto individual con mayor probabilidad, y puede tener una probabilidad baja aunque la victoria local sea probable.</p><ul><li><b>Confianza alta:</b> probabilidad local ≥75%, con muestras suficientes.</li><li><b>Confianza media:</b> probabilidad local ≥60% y sin evidencia suficiente para considerarla alta.</li><li><b>Excluidos:</b> los demás partidos, sin inventar porcentajes cuando faltan datos.</li><li><b>No considera:</b> cuotas de apuestas. Las lesiones, rotaciones y alineaciones deben revisarse aparte.</li></ul><p>Los valores no han sido calibrados con un estudio retrospectivo; deben tratarse como orientativos. La cobertura depende de la API y del presupuesto de solicitudes configurado.</p></div></dialog>
+<script defer src="./app.js"></script>
+</body>
+</html>
